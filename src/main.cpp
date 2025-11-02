@@ -10,8 +10,9 @@ class $modify(ptLevelInfoLayer, LevelInfoLayer) {
 
 
 	bool init(GJGameLevel * level, bool challenge) {
-
+		GJGameLevel* currlevel;
 		if (!LevelInfoLayer::init(level, challenge)) {
+			currlevel = level;
 			return false;
 		}
 		auto savedir = Mod::get()->getSaveDir();
@@ -34,13 +35,28 @@ class $modify(ptLevelInfoLayer, LevelInfoLayer) {
 		playtimeButton->setID("playtime-tracker-button");
 		playtimeButton->setPosition({ 38.f, 76.5f });
 		playtimeButton->setScale(0.8f);
+		//playtimeButton->setUserObject(CCString::create(level->m_levelID.value()));
+		playtimeButton->setTag(level->m_levelID.value());
 
 		menu->updateLayout();
 
 		return true;
 	}
 
-	void onPlaytimeButton(CCObject*) {
-		FLAlertLayer::create("Geode", "Hello from my custom mod!", "OK")->show();
+	void onPlaytimeButton(CCObject* sender) {
+
+		auto id = sender->getTag();
+		//auto obj = static_cast<CCNode*>(sender)->getUserObject();
+
+		//auto str = static_cast<CCString*>(obj)->getCString();
+
+		auto btn = static_cast<CCMenuItemSpriteExtra*>(sender);
+
+		btn->setScale(0.8f);
+
+		FLAlertLayer::create("Playtime Tracker",
+			CCString::createWithFormat(
+				"%d", id)->getCString(),
+			"Close")->show();
 	}
 };
