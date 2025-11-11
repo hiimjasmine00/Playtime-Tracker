@@ -65,6 +65,9 @@ class $modify(ptPauseLayer, PauseLayer) {
 	void customSetup(){
 		PauseLayer::customSetup();
 
+		time_t timestamp;
+		log::debug("PAUSED AT: {}", fmt::to_string(time(&timestamp)));
+
 		auto ptButton = CCMenuItemSpriteExtra::create(
 			CCSprite::createWithSpriteFrameName("GJ_likeBtn_001.png"),
 			this,
@@ -79,7 +82,18 @@ class $modify(ptPauseLayer, PauseLayer) {
 		menu->updateLayout();
 
 	}
+	void onQuit(CCObject* sender) {
 
+		time_t timestamp;
+		log::debug("QUIT AT: {}", fmt::to_string(time(&timestamp)));
+		PauseLayer::onQuit(sender);
+	}
+
+	void onResume(CCObject* sender) {
+		time_t timestamp;
+		log::debug("RESUMED AT: {}", fmt::to_string(time(&timestamp)));
+		PauseLayer::onResume(sender);
+	}
 	void onPtButton(CCObject* sender) {
 		
 		auto btn = static_cast<CCMenuItemSpriteExtra*>(sender);
