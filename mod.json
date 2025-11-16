@@ -8,10 +8,21 @@
 	},
 	"id": "nanew.playtime-tracker",
 	"name": "Playtime Tracker",
-	"version": "v1.0.0",
+	"version": "v0.2.0",
 	"developer": "nanew",
-	"description": "",
+	"description": "A mod which tracks your playtime on levels",
 	"dependencies": {
 		"geode.node-ids": ">=v1.20.0"
+	},
+	"settings": {
+		"remove-pauses": {
+			"type": "bool",
+			"name": "Remove pauses from Playtime",
+			"description": "If enabled, removes the time you spend in the pause menu from your total playtime",
+			"default":true
+		}
+	},
+	"links": {
+		"source": "https://github.com/nanewtech/Playtime-Tracker"
 	}
 }
