@@ -8,11 +8,15 @@
 	},
 	"id": "nanew.playtime-tracker",
 	"name": "Playtime Tracker",
-	"version": "v0.6.0",
+	"version": "v0.7.0",
 	"developer": "nanew",
-	"description": "A mod which tracks your playtime on levels",
+	"description": "Track your playtime on levels!",
 	"dependencies": {
-		"geode.node-ids": ">=v1.20.0"
+		"geode.node-ids": ">=v1.20.0",
+		"cvolton.level-id-api": {
+			"version": ">=v1.2.3",
+			"importance": "required"
+		}
 	},
 	"settings": {
 		"remove-pauses": {

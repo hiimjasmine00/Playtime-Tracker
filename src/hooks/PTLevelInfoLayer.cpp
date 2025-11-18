@@ -16,8 +16,6 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 		if (!LevelInfoLayer::init(level, challenge)) {
 			return false;
 		}
-		auto savedir = Mod::get()->getSaveDir();
-		auto savedirstr = savedir.string();
 
 
 		auto sprite = CCSprite::create("playtimeButton.png"_spr);
@@ -44,7 +42,6 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 			float y = 76.5f; // fucking find a way to get rid of magic number.... :3
 			
 
-			otherMenu->addChild(playtimeButton);
 			
 			
 			// playtimeButton->setScale(0.8f);
@@ -53,18 +50,19 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 
 			// if (otherMenu->getChildByID("dt-skull-button") == nullptr) y = this->getChildByID("settings-menu")->getChildByID("settings-button")->getPositionY();
 			// ^ i wanted to move depending on if death tracker has its button there but it can never find it sooooo blehhhh
+			// fix if i figure out what the fuck goes wrongggg
 
 
 			playtimeButton->setPosition({ x, y });
+
+			otherMenu->addChild(playtimeButton);
 			otherMenu->updateLayout();
 		}
 		else {
 			leftSideMenu->addChild(playtimeButton);
 
-			playtimeButton->setID("playtime-tracker-button");
 			// playtimeButton->setScale(0.8f);
 			// playtimeButton->setUserObject(CCString::create(level->m_levelID.value()));
-			playtimeButton->setUserObject(CCString::create(std::to_string(level->m_levelID.value())));
 
 			leftSideMenu->updateLayout();
 		}
@@ -78,7 +76,7 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 
 		auto obj = static_cast<CCNode*>(sender)->getUserObject();
 
-		auto playtime = data::getPlaytimeRaw(std::stoi(static_cast<CCString*>(obj)->getCString()));
+		auto playtime = data::getPlaytimeRaw(static_cast<CCString*>(obj)->getCString());
 		// log::debug("Playtime Raw: {}", fmt::to_string(playtime));
 		// log::debug("Playtime Formatted: {}", fmt::to_string(data::formattedPlaytime(playtime, false)));
 
@@ -88,7 +86,7 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 
 		FLAlertLayer::create(
 			"Playtime Tracker",
-			CCString::create(data::formattedPlaytime(playtime, false))->getCString(),
+			CCString::create(data::formattedPlaytime(playtime))->getCString(),
 			"Close")->show();
 	}
 };

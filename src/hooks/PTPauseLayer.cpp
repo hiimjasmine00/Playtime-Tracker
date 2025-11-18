@@ -9,12 +9,13 @@ using namespace geode::prelude;
 
 class $modify(PTPauseLayer, PauseLayer) {
 	struct Fields {
-		int m_levelID = 1;
+		std::string m_levelID = "-1";
 	};
 	void customSetup() {
 		PauseLayer::customSetup();
 
-		m_fields->m_levelID = Mod::get()->getSavedValue<int>("current-level-id");
+
+		m_fields->m_levelID = Mod::get()->getSavedValue<std::string>("current-level-id");
 
 		time_t timestamp;
 		log::debug("PAUSED AT: {}", fmt::to_string(time(&timestamp)));
@@ -63,7 +64,7 @@ class $modify(PTPauseLayer, PauseLayer) {
 		auto playtime = data::getSessionPlaytimeRaw(m_fields->m_levelID);
 			FLAlertLayer::create(
 				"Playtime Tracker",
-				CCString::createWithFormat("Current Session: %s", data::formattedPlaytime(playtime, false))->getCString(),
+				CCString::createWithFormat("Current Session: %s", data::formattedPlaytime(playtime))->getCString(),
 				"close")->show();
 	}
 };

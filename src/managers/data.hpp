@@ -4,18 +4,18 @@
 class data {
 public : 
 
-	static void startLevel(int levelID);
+	static void startLevel(std::string levelID);
 
-	static void pauseLevel(int levelID);
+	static void pauseLevel(std::string levelID);
 
-	static void resumeLevel(int levelID);
+	static void resumeLevel(std::string levelID);
 
-	static void exitLevel(int levelID);
+	static void exitLevel(std::string levelID);
 
-	static int getSessionPlaytimeRaw(int levelID);
+	static int getSessionPlaytimeRaw(std::string levelID);
 
-	static int getPlaytimeRaw(int levelID);
+	static int getPlaytimeRaw(std::string levelID);
 
-	static std::string formattedPlaytime(int playtime, bool longString);
+	static std::string formattedPlaytime(int playtime);
 };
 #endif // !data_h

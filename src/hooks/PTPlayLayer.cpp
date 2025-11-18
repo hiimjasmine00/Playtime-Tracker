@@ -2,6 +2,8 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 
+#include <cvolton.level-id-api/include/EditorIDs.hpp>
+
 #include "../managers/data.hpp"
 #include "../managers/settings.hpp"
 
@@ -10,17 +12,27 @@ using namespace geode::prelude;
 
 class $modify(PTPlayLayer, PlayLayer) {
 	struct Fields {
-		int m_levelID = 1;
+	std::string m_levelID;
 	};
 	bool init(GJGameLevel * level, bool useReplay, bool dontCreateObjects) {
 		if (!PlayLayer::init(level, useReplay, dontCreateObjects)) {
 			return false;
 		}
 		time_t timestamp;
-		m_fields->m_levelID = level->m_levelID.value();
-		Mod::get()->setSavedValue<int>("current-level-id", level->m_levelID.value());
+
+
+		m_fields->m_levelID = std::to_string(EditorIDs::getID(level));
 		
-		log::debug("STARTED LEVEL: {}", fmt::to_string(m_fields->m_levelID));
+		if (level->m_levelType == GJLevelType::Local || level->m_levelType == GJLevelType::Editor) m_fields->m_levelID = "Editor-" + std::to_string(EditorIDs::getID(level));
+		log::debug("EDITOR ID: {}", EditorIDs::getID(level));
+		log::debug("LEVEL ID FIELD: {}", m_fields->m_levelID);
+
+		Mod::get()->setSavedValue<std::string>("current-level-id", m_fields->m_levelID);
+
+		log::debug("LEVEL ID SAVED VALUE: {}", Mod::get()->getSavedValue<std::string>("current-level-id"));
+
+
+		log::debug("STARTED LEVEL: {}", fmt::to_string(Mod::get()->getSavedValue<std::string>("current-level-id")));
 		log::debug("STARTED LEVEL AT: {}", fmt::to_string(time(&timestamp)));
 		
 		data::startLevel(m_fields->m_levelID);

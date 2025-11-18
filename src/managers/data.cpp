@@ -46,67 +46,67 @@ matjson::Value getFile() {
     return getFile(); // could end in infinite loop, TODO: prevent possible infinite loop
 }
 
-void data::startLevel(int levelID) {
+void data::startLevel(std::string levelID) {
     auto data = getFile();
     time_t timestamp;
     
     
-    if (!(data[std::to_string(levelID)]["sessions"].isArray())) { 
-        data[std::to_string(levelID)]["sessions"] = matjson::Value::array(); 
+    if (!(data[levelID]["sessions"].isArray())) { 
+        data[levelID]["sessions"] = matjson::Value::array(); 
     }
 
     // I'm so sorry about what youre about to read..... :3
     // I'm too stupid to make it simpler.,,..,. forgive me for i have sinned..... 
 
-    data[std::to_string(levelID)]["sessions"].push(matjson::Value::array());
+    data[levelID]["sessions"].push(matjson::Value::array());
 
-    data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].push(matjson::Value::array());
+    data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].push(matjson::Value::array());
     
-    data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1].push(time(&timestamp)); 
+    data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
 
 
 
     writeFile(data);
 }
 
-void data::pauseLevel(int levelID) {
+void data::pauseLevel(std::string levelID) {
     if (settings::getRemovePauses()) {
 
         auto data = getFile();
         time_t timestamp;
 
-        data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
+        data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
 
         writeFile(data);
     }
 }
 
-void data::resumeLevel(int levelID) {
+void data::resumeLevel(std::string levelID) {
     if (settings::getRemovePauses()) {
         auto data = getFile();
         time_t timestamp;
 
 
-        data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].push(matjson::Value::array());
-        data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
+        data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].push(matjson::Value::array());
+        data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
 
         writeFile(data);
     }
 }
 
-void data::exitLevel(int levelID) {
+void data::exitLevel(std::string levelID) {
     
     if (!settings::getRemovePauses()) {
         auto data = getFile();
         time_t timestamp;
 
-        data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
+        data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1].push(time(&timestamp));
 
         writeFile(data);
     }
 }
 
-int data::getSessionPlaytimeRaw(int levelID) {
+int data::getSessionPlaytimeRaw(std::string levelID) {
     auto data = getFile();
 
     int playtime = 0;
@@ -114,23 +114,23 @@ int data::getSessionPlaytimeRaw(int levelID) {
     time_t timestamp;
 
     if (settings::getRemovePauses()) {
-        for (auto& currPair : data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1]) {
+        for (auto& currPair : data[levelID]["sessions"][data[levelID]["sessions"].size() - 1]) {
 
             playtime += currPair[1].asInt().unwrap() - currPair[0].asInt().unwrap();
         }
         return playtime;
     }
 
-    return time(&timestamp) - data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1][0].asInt().unwrap();
+    return time(&timestamp) - data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1][0].asInt().unwrap();
 }
 
-int data::getPlaytimeRaw(int levelID) {
+int data::getPlaytimeRaw(std::string levelID) {
     auto data = getFile();
 
     int playtime = 0;
 
     if (settings::getRemovePauses()) {
-        for (auto& value : data[std::to_string(levelID)]["sessions"]) {
+        for (auto& value : data[levelID]["sessions"]) {
             // value is matjson::Value
             for (auto& currPair : value) {
                 
@@ -141,12 +141,12 @@ int data::getPlaytimeRaw(int levelID) {
         return playtime;
     }
     time_t timestamp;
-    if (data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1][0].isExactlyUInt()) {
-        log::debug("SESSION PT VAL: {}", data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1][0].asInt().unwrap());
-        return time(&timestamp) - data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1][data[std::to_string(levelID)]["sessions"][data[std::to_string(levelID)]["sessions"].size() - 1].size() - 1][0].asInt().unwrap();
+    if (data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1][0].isExactlyUInt()) {
+        log::debug("SESSION PT VAL: {}", data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1][0].asInt().unwrap());
+        return time(&timestamp) - data[levelID]["sessions"][data[levelID]["sessions"].size() - 1][data[levelID]["sessions"][data[levelID]["sessions"].size() - 1].size() - 1][0].asInt().unwrap();
     }
 
-    for (auto& value : data[std::to_string(levelID)]["sessions"]) {
+    for (auto& value : data[levelID]["sessions"]) {
         // value is matjson::Value
         for (auto& currPair : value) {
             playtime += currPair[1].asInt().unwrap() - currPair[0].asInt().unwrap();
@@ -156,7 +156,7 @@ int data::getPlaytimeRaw(int levelID) {
     return playtime;
 }
 
-std::string data::formattedPlaytime(int playtime, bool longString) {
+std::string data::formattedPlaytime(int playtime) {
     int days = 0;
     int hours = 0;
     int minutes = 0;
