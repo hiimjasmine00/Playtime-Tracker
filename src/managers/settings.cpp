@@ -18,3 +18,7 @@ std::string settings::getHighestConvert() {
 std::string settings::getInfoLayerPosition() {
 	return Mod::get()->getSettingValue<std::string>("infoLayer-position");
 }
+
+bool settings::getStopCompletion() {
+	return Mod::get()->getSettingValue<bool>("stop-completion");
+}

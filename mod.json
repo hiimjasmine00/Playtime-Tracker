@@ -44,6 +44,12 @@
 			"description": "Decide if the button on the level info page should appear above the favorites or on the left side of the screen.",
 			"one-of": ["Bottom", "Left"],
 			"default": "Bottom"
+		},
+		"stop-completion":{
+			"type": "bool",
+			"name": "Stop tracking playtime after completion",
+			"description": "When enabled, the mod will stop tracking your playtime on every level where you have 100% in normal mode.",
+			"default":true
 		}
 	},
 	"links": {

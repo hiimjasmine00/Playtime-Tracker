@@ -10,5 +10,7 @@ public:
 	static std::string getHighestConvert();
 
 	static std::string getInfoLayerPosition();
+
+	static bool getStopCompletion();
 };
 #endif // !settings_h
