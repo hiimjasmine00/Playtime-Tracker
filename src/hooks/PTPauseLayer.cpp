@@ -72,4 +72,10 @@ class $modify(PTPauseLayer, PauseLayer) {
 				CCString::create("Current Session: " + data::formattedPlaytime(playtime))->getCString(),
 				"close")->show();
 	}
+	void onPracticeMode(CCObject* sender) {
+
+		data::resumeLevel(m_fields->m_levelID);
+		Mod::get()->setSavedValue<bool>("is-paused", false);
+		PauseLayer::onPracticeMode(sender);
+	}
 };

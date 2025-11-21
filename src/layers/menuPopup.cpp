@@ -166,14 +166,14 @@ CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
     auto menu = CCMenu::create();
     menu->setContentSize({ 265.f, 25.f });
 
-    auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + data::getPlayedFormatted(data::getPlayedRawAtIndex(levelID, index)))->getCString(), "chatFont.fnt");
-    auto sessionPlaytime = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "chatFont.fnt");
+    auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + data::getPlayedFormatted(data::getPlayedRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
+    auto sessionPlaytime = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
 
     sessionTitle->setPosition({ 0.f,25.f });
-    sessionTitle->setScale(0.725f);
+    sessionTitle->setScale(0.35f);
     sessionTitle->setAnchorPoint({ 0.f,1.f });
 
-    sessionPlaytime->setScale(0.725f);
+    sessionPlaytime->setScale(0.35f);
     sessionPlaytime->setAnchorPoint({ 0.f,0.f });
 
     menu->addChild(sessionTitle);
