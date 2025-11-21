@@ -19,6 +19,18 @@ std::string settings::getInfoLayerPosition() {
 	return Mod::get()->getSettingValue<std::string>("infoLayer-position");
 }
 
-bool settings::getStopCompletion() {
+bool settings::getStopOnCompletion() {
 	return Mod::get()->getSettingValue<bool>("stop-completion");
+}
+
+std::string settings::getTimeFormat() {
+	return Mod::get()->getSettingValue<std::string>("time-format");
+}
+
+bool settings::getUseCustomTimeFormat() {
+	return Mod::get()->getSettingValue<bool>("use-custom-time-format");
+}
+
+std::string settings::getCustomTimeFormat() {
+	return Mod::get()->getSettingValue<std::string>("custom-time-format");
 }

@@ -25,6 +25,12 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     std::string levelID = std::to_string(EditorIDs::getID(level));
     if (level->m_levelType == GJLevelType::Editor) levelID = "Editor-" + levelID;
 
+    auto subtitleLabel = CCLabelBMFont::create(CCString::create(level->m_levelName + " - Sessions: " + std::to_string(data::getSessionCount(levelID)))->getCString(), "goldFont.fnt");
+    subtitleLabel->setScale(0.5f);
+    subtitleLabel->setPosition({150.f, 233.f});
+
+    m_mainLayer->addChild(subtitleLabel);
+
     int totalPlaytime = data::getPlaytimeRaw(levelID);
     int sessionPlaytime = data::getLatestSession(levelID);
 
@@ -39,10 +45,9 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     sessionValue->setScale(0.35f);
 
     // the scroll thing
-    auto scrollLayer = geode::ScrollLayer::create({ 10.f,10.f,265.f,195.f });
+    auto scrollLayer = geode::ScrollLayer::create({ 10.f,10.f,265.f,195.f});
     scrollLayer->setAnchorPoint({ 0.0f, 0.0f });
     scrollLayer->setID("scroll-layer");
-
     // scrollbar!?!? lets hope it works without anything else
     auto scrollbar = geode::Scrollbar::create(scrollLayer);
     scrollbar->setAnchorPoint({ 0.f, 0.f });
@@ -68,21 +73,56 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     auto content = scrollLayer->getChildByID("content-layer");
     content->setPosition({ 10.f,0.f });
     content->setLayout(contentLayout);
+    
 
     // total and session
     content->addChild(totalTitle);
     content->addChild(totalValue);
     content->addChild(sessionTitle);
     content->addChild(sessionValue);
+
+
     // data
-    content->addChild(CCLabelBMFont::create("Level Stats", "goldFont.fnt"));
+    std::string timeAttemptStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / 1);
+    if (level->m_attempts != 0) timeAttemptStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / level->m_attempts);
+    std::string timeSessionsStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / 1);
+    if (data::getSessionCount(levelID) != 0) timeSessionsStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / data::getSessionCount(levelID));
+
+    auto statsLabel = CCLabelBMFont::create("Level Stats", "goldFont.fnt");
+    auto lastPlayedLabel = CCLabelBMFont::create(CCString::create("Last Played: Never")->getCString(), "bigFont.fnt");
+    if (data::getSessionCount(levelID) > 0) lastPlayedLabel = CCLabelBMFont::create(CCString::create("Last Played: " + data::getPlayedFormatted(data::getLastPlayedRaw(levelID)))->getCString(), "bigFont.fnt");
+    auto timeAttemptLabel = CCLabelBMFont::create(CCString::create("Time/Attempt: " + timeAttemptStat)->getCString(), "bigFont.fnt");
+    auto timeSessionsLabel = CCLabelBMFont::create(CCString::create("Time/Session: " + timeSessionsStat)->getCString(), "bigFont.fnt");
+
+    statsLabel->setScale(0.75f);
+    lastPlayedLabel->setScale(0.35f);
+    timeAttemptLabel->setScale(0.3f);
+    timeSessionsLabel->setScale(0.3f);
+
+    content->addChild(statsLabel);
+    content->addChild(lastPlayedLabel);
+    content->addChild(timeAttemptLabel);
+    content->addChild(timeSessionsLabel);
+
 
     //sessions
+    auto sessionLabel = CCLabelBMFont::create("Sessions", "goldFont.fnt");
+    sessionLabel->setScale(0.75f);
+    content->addChild(sessionLabel);
+    for (int i = data::getSessionCount(levelID) - 1; i >= 0; i--) {
+        auto menu = SessionMenuElement(levelID, i);
+        menu->setID(fmt::format("session-{}", i + 1));
+        content->addChild(menu);
+    }
 
+
+    
+    
+    content->setContentSize({ 265.f, 250.f + 25.f * data::getSessionCount(levelID) });
 
     content->updateLayout();
 
-
+    scrollLayer->scrollToTop();
 
 
     // extra buttons (delete and settings stuff)
@@ -118,4 +158,24 @@ MenuPopup* MenuPopup::create(GJGameLevel* const& level) {
     }
     delete ret;
     return nullptr;
+}
+
+CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
+    auto menu = CCMenu::create();
+    menu->setContentSize({ 265.f, 25.f });
+
+    auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + data::getPlayedFormatted(data::getPlayedRawAtIndex(levelID, index)))->getCString(), "chatFont.fnt");
+    auto sessionPlaytime = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "chatFont.fnt");
+
+    sessionTitle->setPosition({ 0.f,25.f });
+    sessionTitle->setScale(0.725f);
+    sessionTitle->setAnchorPoint({ 0.f,1.f });
+
+    sessionPlaytime->setScale(0.725f);
+    sessionPlaytime->setAnchorPoint({ 0.f,0.f });
+
+    menu->addChild(sessionTitle);
+    menu->addChild(sessionPlaytime);
+
+    return menu;
 }

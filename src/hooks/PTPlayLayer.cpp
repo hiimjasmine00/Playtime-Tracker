@@ -21,6 +21,8 @@ class $modify(PTPlayLayer, PlayLayer) {
 		time_t timestamp;
 
 
+		Mod::get()->setSavedValue<int>("current-level-best", level->m_normalPercent.value());
+
 		m_fields->m_levelID = std::to_string(EditorIDs::getID(level));
 		
 		if (level->m_levelType == GJLevelType::Local || level->m_levelType == GJLevelType::Editor) m_fields->m_levelID = "Editor-" + std::to_string(EditorIDs::getID(level));

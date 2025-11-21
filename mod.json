@@ -19,10 +19,21 @@
 		}
 	},
 	"settings": {
+		"general-title":{
+			"type": "title",
+			"name": "General Settings",
+			"description": "These settings dictate the basic functionality of Playtime Tracker, you will probably find most useful settings here!"
+		},
 		"remove-pauses": {
 			"type": "bool",
 			"name": "Remove pauses from Playtime",
 			"description": "If enabled, removes the time you spend in the pause menu from your playtime. This also removes the time you spend at the 'Level Complete' screen",
+			"default":true
+		},
+		"stop-completion":{
+			"type": "bool",
+			"name": "Stop tracking after completion",
+			"description": "When enabled, the mod will stop tracking your playtime on every level where you have 100% in normal mode. ON EDITOR LEVELS: Make sure you reset your best if you complete it while building to track your playtime when you verify your level.",
 			"default":true
 		},
 		"short-text":{
@@ -45,19 +56,42 @@
 			"one-of": ["Bottom", "Left"],
 			"default": "Bottom"
 		},
-		"stop-completion":{
+		"time-title":{
+			"type": "title",
+			"name": "Time format settings",
+			"description": "These settings relate to the way Playtime Tracker displays at what time your sessions happened (in the popup on the level select screens)!"
+		},
+		"time-format":{
+			"type":"string",
+			"name": "Use preset time format",
+			"one-of": ["EU", "USA", "ISO"],
+			"default":"ISO",
+			"enable-if": "!(use-custom-time-format)",
+			"enable-if-description": "Disable \"Use custom time format\""
+		},
+		"use-custom-time-format":{
 			"type": "bool",
-			"name": "Stop tracking playtime after completion",
-			"description": "When enabled, the mod will stop tracking your playtime on every level where you have 100% in normal mode.",
-			"default":true
+			"name": "Use custom time format",
+			"description": "Enables the option to enter your own custom time foramt",
+			"default":false
+		},
+		"custom-time-format":{
+			"type": "string",
+			"name": "Custom time format",
+			"description": "Enter your Custom time format! Reference to posible keys to use are in the following link (example: %d.%m.%Y %T for EU format) https://cppreference.com/w/cpp/chrono/c/strftime.html",
+			"filter": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{};:,.<> ",
+			"enable-if": "use-custom-time-format",
+			"enable-if-description": "Enable \"Use custom time format\"",
+			"default":""
 		}
 	},
 	"links": {
-		"source": "https://github.com/nanewtech/Playtime-Tracker"
+		"source": "https://github.com/nanewtech/Playtime-Tracker",
+		"community": "https://discord.gg/DxYp6pma3D"
 	},
 	"issues": {
 		"url": "https://github.com/nanewtech/Playtime-Tracker/issues",
-		"info": "Please report any bugs/crashes etc. on the repository with an issue! Additionally, you can send me a dm on discord: @nanewtech"},
+		"info": "Please report any bugs/crashes etc. on the repository or discord with an issue/forum post! Additionally, you can send me a dm on discord: @nanewtech"},
 	"tags": ["offline", "utility"],
 	"resources": {
 		"sprites": ["resources/playtimeButton.png"]

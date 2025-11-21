@@ -1,3 +1,4 @@
+#pragma once
 #ifndef settings_h
 #define settings_h
 
@@ -11,6 +12,12 @@ public:
 
 	static std::string getInfoLayerPosition();
 
-	static bool getStopCompletion();
+	static bool getStopOnCompletion();
+
+	static std::string getTimeFormat();
+
+	static bool getUseCustomTimeFormat();
+
+	static std::string getCustomTimeFormat();
 };
 #endif // !settings_h
