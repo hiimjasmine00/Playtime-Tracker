@@ -20,6 +20,8 @@ class $modify(PTPlayLayer, PlayLayer) {
 		}
 		time_t timestamp;
 
+		Mod::get()->setSavedValue<bool>("is-paused", false);
+		log::debug("UNPAUSED!!!!!");
 
 		Mod::get()->setSavedValue<int>("current-level-best", level->m_normalPercent.value());
 
@@ -43,6 +45,8 @@ class $modify(PTPlayLayer, PlayLayer) {
 	}
 
 	void levelComplete() {
+		Mod::get()->setSavedValue<bool>("is-paused", true);
+		
 		data::pauseLevel(m_fields -> m_levelID);
 
 		log::debug("PLAYLAYER levelComplete() CALLED!!!!");
@@ -57,7 +61,15 @@ class $modify(PTPlayLayer, PlayLayer) {
 		log::debug("QUIT AT: {}", fmt::to_string(time(&timestamp)));
 
 		log::debug("PLAYLAYER onQuit() CALLED!!!!");
-
+		Mod::get()->setSavedValue<bool>("is-paused", false);
 		PlayLayer::onQuit();
+	}
+
+	void resetLevel() {
+		if (Mod::get()->getSavedValue<bool>("is-paused")) data::resumeLevel(m_fields->m_levelID);
+		Mod::get()->setSavedValue<bool>("is-paused", false);
+		log::debug("UNPAUSED!!!!!");
+
+		PlayLayer::resetLevel();
 	}
 };

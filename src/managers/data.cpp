@@ -108,8 +108,10 @@ void data::resumeLevel(std::string levelID) {
 }
 
 void data::exitLevel(std::string levelID) {
+    log::debug("EXIT LEVEL CALLED!");
     if (!(settings::getStopOnCompletion() && Mod::get()->getSavedValue<int>("current-level-best") == 100)) {
-        if (!settings::getRemovePauses()) {
+        log::debug("GETS PAST COMPLETION CHECK");
+        if (!(settings::getRemovePauses()) || (Mod::get()->getSavedValue<bool>("is-paused") && !(settings::getRemovePauses())) || (!(Mod::get()->getSavedValue<bool>("is-paused")) && settings::getRemovePauses())) {
             auto data = getFile();
             time_t timestamp;
 

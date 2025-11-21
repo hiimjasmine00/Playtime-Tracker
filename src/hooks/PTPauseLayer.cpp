@@ -14,6 +14,8 @@ class $modify(PTPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
 
+		log::debug("IS PAUSED!!!!");
+		Mod::get()->setSavedValue<bool>("is-paused", true);
 
 		m_fields->m_levelID = Mod::get()->getSavedValue<std::string>("current-level-id");
 
@@ -53,6 +55,8 @@ class $modify(PTPauseLayer, PauseLayer) {
 		log::debug("PauseLayer onResume() CALLED!!!!");
 		data::resumeLevel(m_fields->m_levelID);
 
+		log::debug("IS NOT PAUSED!!!!");
+		Mod::get()->setSavedValue<bool>("is-paused", false);
 
 		PauseLayer::onResume(sender);
 	}
