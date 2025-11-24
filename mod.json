@@ -8,7 +8,7 @@
 	},
 	"id": "nanew.playtime-tracker",
 	"name": "Playtime Tracker",
-	"version": "v0.8.4",
+	"version": "v0.8.6",
 	"developer": "nanew",
 	"description": "Track your playtime on levels!",
 	"dependencies": {
@@ -94,6 +94,9 @@
 		"info": "Please report any bugs/crashes etc. on the repository or discord with an issue/forum post! Additionally, you can send me a dm on discord: @nanewtech"},
 	"tags": ["offline", "utility"],
 	"resources": {
-		"sprites": ["resources/playtimeButton.png"]
+		"sprites": [
+			"resources/playtimeButton.png",
+			"resources/stopwatch.png"
+		]
 	}
 }

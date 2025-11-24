@@ -18,6 +18,30 @@ public:
     }
 };
 
+
+class DeleteButton : public CCLayer {
+public:
+    void onDeleteAllButton(CCObject* sender) {
+        geode::createQuickPopup(
+            "Delete level data",
+            "Are you SURE you want to <cr>delete ALL data</c> on this level? (<cr>ALL your sessions will be deleted!</c>)",
+            "Don't delete", "Delete everything",
+            [](auto, bool btn2) {
+                if (btn2) {
+                    actuallyDeleteData();
+                    
+                }
+            }
+        );
+    }
+    static void actuallyDeleteData() {
+        std::string levelID = Mod::get()->getSavedValue<std::string>("current-level-id");
+        log::debug("DELETING LEVEL DATA FOR: {}", levelID);
+        data::deleteLevelData(levelID);
+    }
+};
+
+
 bool MenuPopup::setup(GJGameLevel* const& level) {
 	this->setTitle("Playtime Tracker");
     this->setID("Playtime-Tracker-Popup");
@@ -47,7 +71,7 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     sessionValue->setScale(0.35f);
 
     // the scroll thing
-    auto scrollLayer = geode::ScrollLayer::create({ 10.f,10.f,265.f,195.f});
+    auto scrollLayer = geode::ScrollLayer::create({ 10.f,10.f,265.f,196.f});
     scrollLayer->setAnchorPoint({ 0.0f, 0.0f });
     scrollLayer->setID("scroll-layer");
     // scrollbar!?!? lets hope it works without anything else
@@ -122,6 +146,13 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     
     content->setContentSize({ 265.f, 180.f + 30.f * (data::getSessionCount(levelID)) });
 
+    if (content->getContentHeight() < 196.f) content->setContentSize({ 265.f, 196.f});
+
+    auto noSessionLabel = CCLabelBMFont::create("No sessions yet!", "bigFont.fnt");
+    noSessionLabel->setScale(0.35f);
+
+    if (data::getSessionCount(levelID) == 0) content->addChild(noSessionLabel);
+
     content->updateLayout();
 
     scrollLayer->scrollToTop();
@@ -130,6 +161,21 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     // extra buttons (delete and settings stuff)
     auto extrabuttons = m_mainLayer->getChildByType<CCMenu>(0);
     
+    auto deleteSpr = CCSprite::createWithSpriteFrameName("GJ_trashBtn_001.png");
+    deleteSpr->setScale(0.75f);
+
+    Mod::get()->setSavedValue<std::string>("current-level-id", levelID);
+
+    auto deleteButton = CCMenuItemSpriteExtra::create(
+        deleteSpr,
+        this,
+        menu_selector(DeleteButton::onDeleteAllButton)
+    );
+
+    deleteButton->setPosition({300.f, 0.f});
+
+    extrabuttons->addChild(deleteButton);
+
     auto settingsSpr = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
     settingsSpr->setScale(0.75f);
 
@@ -138,6 +184,8 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
         this,
         menu_selector(OpenSettings::open)
     );
+
+
 
     settingsButton->setPosition({300.f, 272.f});
 
@@ -165,7 +213,7 @@ MenuPopup* MenuPopup::create(GJGameLevel* const& level) {
 CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
     auto menu = CCMenu::create();
     menu->setContentSize({ 265.f, 25.f });
-
+    menu->setTag(index);
     auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + data::getPlayedFormatted(data::getPlayedRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
     auto sessionPlaytime = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
 
@@ -175,6 +223,8 @@ CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
 
     sessionPlaytime->setScale(0.35f);
     sessionPlaytime->setAnchorPoint({ 0.f,0.f });
+
+    // TODO: add delete button for single session
 
     menu->addChild(sessionTitle);
     menu->addChild(sessionPlaytime);

@@ -1,6 +1,7 @@
 #include <ctime>
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/ui/BasedButtonSprite.hpp>
 
 #include <cvolton.level-id-api/include/EditorIDs.hpp>
 

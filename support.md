@@ -1,4 +1,4 @@
-Playtime Tracker is completely free, however, if you want to, you can go to [my Ko-Fi](https://ko-fi.com/nanew) and donate.
+Playtime Tracker is completely free, however, if you want to, you can go to [my Ko-fi](https://ko-fi.com/nanew) and donate.
 
 In case you do, you will recieve a 'supporter' role on the discord server.
 

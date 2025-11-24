@@ -279,3 +279,14 @@ int data::getSessionCount(std::string levelID) {
     return data[levelID]["sessions"].size();
 }
 
+void data::deleteLevelData(std::string levelID) {
+    auto data = getFile();
+    data[levelID]["sessions"] = matjson::Value::array();
+    writeFile(data);
+}
+
+void data::deleteSessionAtIndex(std::string levelID, int index) {
+    auto data = getFile();
+    data[levelID]["sessions"][index] = matjson::Value::array();
+    writeFile(data);
+}

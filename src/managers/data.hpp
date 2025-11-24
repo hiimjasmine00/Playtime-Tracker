@@ -30,5 +30,9 @@ public :
 	static std::string getPlayedFormatted(tm* localTimestamp);
 
 	static int getSessionCount(std::string levelID);
+
+	static void deleteLevelData(std::string levelID);
+
+	static void deleteSessionAtIndex(std::string levelID, int index);
 };
 #endif // !data_h
