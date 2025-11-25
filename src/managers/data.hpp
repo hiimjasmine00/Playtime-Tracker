@@ -3,6 +3,7 @@
 
 class data {
 public : 
+	static bool fileExists();
 
 	static void startLevel(std::string levelID);
 

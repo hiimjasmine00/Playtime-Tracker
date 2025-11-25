@@ -1,5 +1,5 @@
 #include "./data.hpp"
-#include "../managers/settings.hpp"
+#include "./settings.hpp"
 
 #include <fstream>
 #include <ctime>
@@ -9,10 +9,10 @@
 using namespace geode::prelude;
 
 auto dataDir = Mod::get()->getSaveDir().string() + "/leveldata.json";
-std::filesystem::path dataDirPath = std::filesystem::u8path(dataDir); 
+std::filesystem::path dataDirPath = std::filesystem::path(dataDir); 
 
 
-bool fileExists() {
+bool data::fileExists() {
     if (std::filesystem::exists(dataDirPath)) {
         return true;
     }
@@ -20,7 +20,7 @@ bool fileExists() {
 }
 
 void writeFile(matjson::Value data) {
-    std::string output = data.dump(matjson::NO_INDENTATION); //REMEMBER TO READD NO INDENT lowkey just no indentation cause it makes editing the file harder = less cheating @mizuki :eyes: :eyes:
+    std::string output = data.dump(matjson::NO_INDENTATION); //lowkey just no indentation cause it makes editing the file harder = less "cheating" :skull: @mizuki :eyes: :eyes:
     std::ofstream o(dataDirPath);
     o << output;
     o.close();
@@ -35,7 +35,7 @@ void initializeFile() {
 }
 
 matjson::Value getFile() {
-    if (fileExists()) {
+    if (data::fileExists()) {
         std::ifstream i(dataDir);
         auto data = matjson::parse(i).unwrap();
         i.close();

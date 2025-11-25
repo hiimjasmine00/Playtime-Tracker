@@ -34,3 +34,7 @@ bool settings::getUseCustomTimeFormat() {
 std::string settings::getCustomTimeFormat() {
 	return Mod::get()->getSettingValue<std::string>("custom-time-format");
 }
+
+bool settings::getDisableDeletionPopup() {
+	return Mod::get()->getSettingValue<bool>("disable-deletion-popup");
+}

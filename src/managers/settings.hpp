@@ -18,4 +18,6 @@ public:
 	static bool getUseCustomTimeFormat();
 
 	static std::string getCustomTimeFormat();
+
+	static bool getDisableDeletionPopup();
 };

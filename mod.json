@@ -56,6 +56,12 @@
 			"one-of": ["Bottom", "Left"],
 			"default": "Bottom"
 		},
+		"disable-deletion-popup":{
+			"type": "bool",
+			"name": "Disable info popup on deletion",
+			"description": "Disables the popup that shows up after deleting sessions.",
+			"default":false
+		},
 		"time-title":{
 			"type": "title",
 			"name": "Time format settings",

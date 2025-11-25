@@ -10,7 +10,6 @@
 
 using namespace geode::prelude;
 
-// idk why but this just works anythign else doesnt idunoooooooo
 class OpenSettings : public CCLayer {
 public:
     void open(CCObject*) {
@@ -25,7 +24,6 @@ public:
 
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         std::string levelID = static_cast<CCString*>(obj)->getCString();
-        bool deleted = false;
         geode::createQuickPopup(
             "Delete level data",
             "Are you SURE you want to <cr>delete ALL data</c> on this level? (<cr>ALL your sessions will be deleted!</c>)",
