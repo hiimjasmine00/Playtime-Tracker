@@ -85,8 +85,8 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 
 		auto obj = static_cast<CCNode*>(sender)->getUserObject();
 
-		auto totalPlaytime = data::getPlaytimeRaw(static_cast<CCString*>(obj)->getCString());
-		auto lastPlaytime = data::getLatestSession(static_cast<CCString*>(obj)->getCString());
+		auto totalPlaytime = Data::getPlaytimeRaw(static_cast<CCString*>(obj)->getCString());
+		auto lastPlaytime = Data::getLatestSession(static_cast<CCString*>(obj)->getCString());
 		
 		// log::debug("Playtime Raw: {}", fmt::to_string(playtime));
 		// log::debug("Playtime Formatted: {}", fmt::to_string(data::formattedPlaytime(playtime, false)));

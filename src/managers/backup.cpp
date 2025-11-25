@@ -16,14 +16,31 @@ bool Backup::fileExists() {
 	return false;
 }
 
-void Backup::writeFile(std::string output) {
+matjson::Value Backup::getFile() {
+	if (Backup::fileExists()) {
+		std::ifstream i(backupDir);
+		auto data = matjson::parse(i).unwrap();
+		i.close();
+		return data;
+	}
+}
+
+void Backup::writeFile(matjson::Value data) {
+	std::string output = data.dump(matjson::NO_INDENTATION);
 	std::ofstream o(dataDirPath);
 	o << output;
 	o.close();
 }
 
 void Backup::createBackup() {
-	if (data::fileExists()) {
+		auto data = Data::getFile();
+		Backup::writeFile(data);
+}
 
-	}
+void Backup::loadBackup() {
+	auto data = Backup::getFile();
+	std::string output = data.dump(matjson::NO_INDENTATION);
+	std::ofstream o(dataDirPath);
+	o << output;
+	o.close();
 }

@@ -30,7 +30,7 @@ public:
             "Don't delete", "Delete everything",
             [levelID](auto, bool btn2) {
                 if (btn2) {
-                    data::deleteLevelData(levelID);
+                    Data::deleteLevelData(levelID);
                     FLAlertLayer::create(
                         "Delete level Data",
                         "Deleted all data. Reopen the popup for changes to take effect. <cy>You can disable this popup in the settings.</c>",
@@ -48,7 +48,7 @@ public:
         auto obj = static_cast<CCNode*>(sender)->getUserObject();
         std::string levelID = static_cast<CCString*>(obj)->getCString();
 
-        data::deleteSessionAtIndex(levelID, index);
+        Data::deleteSessionAtIndex(levelID, index);
         FLAlertLayer::create(
             "Delete session Data",
             CCString::createWithFormat("Deleted session %i. Reopen the popup for changes to take effect. <cy>You can disable this popup in the settings.</c>", index + 1)->getCString(),
@@ -67,19 +67,19 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
 
     std::string levelName = level->m_levelName.c_str();
 
-    auto subtitleLabel = CCLabelBMFont::create(CCString::create(levelName + " - Sessions: " + std::to_string(data::getSessionCount(levelID)))->getCString(), "goldFont.fnt");
+    auto subtitleLabel = CCLabelBMFont::create(CCString::create(levelName + " - Sessions: " + std::to_string(Data::getSessionCount(levelID)))->getCString(), "goldFont.fnt");
     subtitleLabel->setScale(0.5f);
     subtitleLabel->setPosition({150.f, 233.f});
 
     m_mainLayer->addChild(subtitleLabel);
 
-    int totalPlaytime = data::getPlaytimeRaw(levelID);
-    int sessionPlaytime = data::getLatestSession(levelID);
+    int totalPlaytime = Data::getPlaytimeRaw(levelID);
+    int sessionPlaytime = Data::getLatestSession(levelID);
 
 	auto totalTitle = CCLabelBMFont::create("Total Playtime:", "goldFont.fnt");
-    auto totalValue = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(totalPlaytime))->getCString(), "bigFont.fnt");
+    auto totalValue = CCLabelBMFont::create(CCString::create(Data::formattedPlaytime(totalPlaytime))->getCString(), "bigFont.fnt");
     auto sessionTitle = CCLabelBMFont::create("Last Session:", "goldFont.fnt");
-    auto sessionValue = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(sessionPlaytime))->getCString(), "bigFont.fnt");
+    auto sessionValue = CCLabelBMFont::create(CCString::create(Data::formattedPlaytime(sessionPlaytime))->getCString(), "bigFont.fnt");
 
     totalTitle->setScale(0.75f);
     totalValue->setScale(0.35f);
@@ -125,14 +125,14 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
 
 
     // data
-    std::string timeAttemptStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / 1);
-    if (level->m_attempts != 0) timeAttemptStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / level->m_attempts);
-    std::string timeSessionsStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / 1);
-    if (data::getSessionCount(levelID) != 0) timeSessionsStat = data::formattedPlaytime(data::getPlaytimeRaw(levelID) / data::getSessionCount(levelID));
+    std::string timeAttemptStat = Data::formattedPlaytime(Data::getPlaytimeRaw(levelID) / 1);
+    if (level->m_attempts != 0) timeAttemptStat = Data::formattedPlaytime(Data::getPlaytimeRaw(levelID) / level->m_attempts);
+    std::string timeSessionsStat = Data::formattedPlaytime(Data::getPlaytimeRaw(levelID) / 1);
+    if (Data::getSessionCount(levelID) != 0) timeSessionsStat = Data::formattedPlaytime(Data::getPlaytimeRaw(levelID) / Data::getSessionCount(levelID));
 
     auto statsLabel = CCLabelBMFont::create("Level Stats", "goldFont.fnt");
     auto lastPlayedLabel = CCLabelBMFont::create(CCString::create("Last Played: Never")->getCString(), "bigFont.fnt");
-    if (data::getSessionCount(levelID) > 0) lastPlayedLabel = CCLabelBMFont::create(CCString::create("Last Played: " + data::getPlayedFormatted(data::getLastPlayedRaw(levelID)))->getCString(), "bigFont.fnt");
+    if (Data::getSessionCount(levelID) > 0) lastPlayedLabel = CCLabelBMFont::create(CCString::create("Last Played: " + Data::getPlayedFormatted(Data::getLastPlayedRaw(levelID)))->getCString(), "bigFont.fnt");
     auto timeAttemptLabel = CCLabelBMFont::create(CCString::create("Time/Attempt: " + timeAttemptStat)->getCString(), "bigFont.fnt");
     auto timeSessionsLabel = CCLabelBMFont::create(CCString::create("Time/Session: " + timeSessionsStat)->getCString(), "bigFont.fnt");
 
@@ -151,7 +151,7 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
     auto sessionLabel = CCLabelBMFont::create("Sessions", "goldFont.fnt");
     sessionLabel->setScale(0.75f);
     content->addChild(sessionLabel);
-    for (int i = data::getSessionCount(levelID) - 1; i >= 0; i--) {
+    for (int i = Data::getSessionCount(levelID) - 1; i >= 0; i--) {
         auto menu = SessionMenuElement(levelID, i);
         menu->setID(fmt::format("session-{}", i + 1));
         content->addChild(menu);
@@ -160,14 +160,14 @@ bool MenuPopup::setup(GJGameLevel* const& level) {
 
     
     
-    content->setContentSize({ 265.f, 180.f + 30.f * (data::getSessionCount(levelID)) });
+    content->setContentSize({ 265.f, 180.f + 30.f * (Data::getSessionCount(levelID)) });
 
     if (content->getContentHeight() < 196.f) content->setContentSize({ 265.f, 196.f});
 
     auto noSessionLabel = CCLabelBMFont::create("No sessions yet!", "bigFont.fnt");
     noSessionLabel->setScale(0.35f);
 
-    if (data::getSessionCount(levelID) == 0) content->addChild(noSessionLabel);
+    if (Data::getSessionCount(levelID) == 0) content->addChild(noSessionLabel);
 
     content->updateLayout();
 
@@ -228,8 +228,8 @@ CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
     auto menu = CCMenu::create();
     menu->setContentSize({ 265.f, 25.f });
     menu->setTag(index);
-    auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + data::getPlayedFormatted(data::getPlayedRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
-    auto sessionPlaytime = CCLabelBMFont::create(CCString::create(data::formattedPlaytime(data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
+    auto sessionTitle = CCLabelBMFont::create(CCString::create("Session " + std::to_string(index + 1) + " - " + Data::getPlayedFormatted(Data::getPlayedRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
+    auto sessionPlaytime = CCLabelBMFont::create(CCString::create(Data::formattedPlaytime(Data::getSessionPlaytimeRawAtIndex(levelID, index)))->getCString(), "bigFont.fnt");
 
     auto deleteSprite = CCSprite::createWithSpriteFrameName("GJ_trashBtn_001.png");
     deleteSprite->setScale(0.55f);
@@ -251,7 +251,7 @@ CCMenu* MenuPopup::SessionMenuElement(std::string levelID, int index) {
     sessionPlaytime->setScale(0.35f);
     sessionPlaytime->setAnchorPoint({ 0.f,0.f });
 
-    if (data::getSessionCount(levelID) > 1) menu->addChild(deleteSessionButton);
+    if (Data::getSessionCount(levelID) > 1) menu->addChild(deleteSessionButton);
     menu->addChild(sessionTitle);
     menu->addChild(sessionPlaytime);
 

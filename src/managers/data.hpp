@@ -1,9 +1,11 @@
 #pragma once
 #define data_h
 
-class data {
+class Data {
 public : 
 	static bool fileExists();
+
+	static matjson::Value getFile();
 
 	static void startLevel(std::string levelID);
 

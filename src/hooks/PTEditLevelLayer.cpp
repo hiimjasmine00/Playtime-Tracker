@@ -56,8 +56,8 @@ class $modify(PTEditLevelLayer, EditLevelLayer) {
 		auto obj = static_cast<CCNode*>(sender)->getUserObject();
 
 		std::string str = static_cast<CCString*>(obj)->getCString();
-		auto totalPlaytime = data::getPlaytimeRaw(str);
-		auto lastPlaytime = data::getLatestSession(str);
+		auto totalPlaytime = Data::getPlaytimeRaw(str);
+		auto lastPlaytime = Data::getLatestSession(str);
 
 		// call menupopup here as well
 

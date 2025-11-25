@@ -22,7 +22,7 @@ class $modify(PTPauseLayer, PauseLayer) {
 		time_t timestamp;
 		log::debug("PAUSED AT: {}", fmt::to_string(time(&timestamp)));
 
-		data::pauseLevel(m_fields->m_levelID);
+		Data::pauseLevel(m_fields->m_levelID);
 		auto sprite = CCSprite::create("playtimeButton.png"_spr);
 		sprite->setScale(0.8f);
 
@@ -53,7 +53,7 @@ class $modify(PTPauseLayer, PauseLayer) {
 		time_t timestamp;
 		log::debug("RESUMED AT: {}", fmt::to_string(time(&timestamp)));
 		log::debug("PauseLayer onResume() CALLED!!!!");
-		data::resumeLevel(m_fields->m_levelID);
+		Data::resumeLevel(m_fields->m_levelID);
 
 		log::debug("IS NOT PAUSED!!!!");
 		Mod::get()->setSavedValue<bool>("is-paused", false);
@@ -66,22 +66,22 @@ class $modify(PTPauseLayer, PauseLayer) {
 
 		// TODO: Make popup for pause menu, call it here
 
-		auto playtime = data::getSessionPlaytimeRaw(m_fields->m_levelID);
+		auto playtime = Data::getSessionPlaytimeRaw(m_fields->m_levelID);
 			FLAlertLayer::create(
 				"Playtime Tracker",
-				CCString::create("Current Session: " + data::formattedPlaytime(playtime))->getCString(),
+				CCString::create("Current Session: " + Data::formattedPlaytime(playtime))->getCString(),
 				"close")->show();
 	}
 	void onPracticeMode(CCObject* sender) {
 
-		data::resumeLevel(m_fields->m_levelID);
+		Data::resumeLevel(m_fields->m_levelID);
 		Mod::get()->setSavedValue<bool>("is-paused", false);
 		PauseLayer::onPracticeMode(sender);
 	}
 
 	void onEdit(CCObject* sender) {
 		Mod::get()->setSavedValue<bool>("is-paused", false);
-		data::exitLevel(m_fields->m_levelID);
+		Data::exitLevel(m_fields->m_levelID);
 		PauseLayer::onEdit(sender);
 	}
 };

@@ -39,7 +39,7 @@ class $modify(PTPlayLayer, PlayLayer) {
 		log::debug("STARTED LEVEL: {}", fmt::to_string(Mod::get()->getSavedValue<std::string>("current-level-id")));
 		log::debug("STARTED LEVEL AT: {}", fmt::to_string(time(&timestamp)));
 		
-		data::startLevel(m_fields->m_levelID);
+		Data::startLevel(m_fields->m_levelID);
 
 		return true;
 	}
@@ -47,7 +47,7 @@ class $modify(PTPlayLayer, PlayLayer) {
 	void levelComplete() {
 		Mod::get()->setSavedValue<bool>("is-paused", true);
 		
-		data::pauseLevel(m_fields -> m_levelID);
+		Data::pauseLevel(m_fields -> m_levelID);
 
 		log::debug("PLAYLAYER levelComplete() CALLED!!!!");
 
@@ -55,7 +55,7 @@ class $modify(PTPlayLayer, PlayLayer) {
 	}
 
 	void onQuit() {
-		data::exitLevel(m_fields->m_levelID);
+		Data::exitLevel(m_fields->m_levelID);
 
 		time_t timestamp;
 		log::debug("QUIT AT: {}", fmt::to_string(time(&timestamp)));
@@ -66,7 +66,7 @@ class $modify(PTPlayLayer, PlayLayer) {
 	}
 
 	void resetLevel() {
-		if (Mod::get()->getSavedValue<bool>("is-paused")) data::resumeLevel(m_fields->m_levelID);
+		if (Mod::get()->getSavedValue<bool>("is-paused")) Data::resumeLevel(m_fields->m_levelID);
 		Mod::get()->setSavedValue<bool>("is-paused", false);
 		log::debug("UNPAUSED!!!!!");
 

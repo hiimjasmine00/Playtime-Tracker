@@ -3,9 +3,11 @@
 
 class Backup {
 protected:
-	static bool fileExists();
-	static void writeFile(std::string output);
+	static void writeFile(matjson::Value data);
+	static matjson::Value getFile();
 
 public:
+	static bool fileExists();
 	static void createBackup();
+	static void loadBackup();
 };
