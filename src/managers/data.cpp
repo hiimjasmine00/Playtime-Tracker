@@ -206,6 +206,11 @@ int Data::getPlaytimeRaw(std::string const& levelID) {
     catch (const geode::UnwrapException&) {
         return playtime;
     }
+    for (auto& session : sessions) {
+        for (auto& currPair : session) {
+            playtime += currPair[1].asInt().unwrap() - currPair[0].asInt().unwrap();
+        }
+    }
     return playtime;
 }
 
