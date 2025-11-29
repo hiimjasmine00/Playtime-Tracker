@@ -21,10 +21,18 @@ bool PausePopup::setup(std::string const& levelID) {
 
     auto playtimeTitle = CCLabelBMFont::create("Current session:", "GoldFont.fnt");
     playtimeTitle->setScale(0.75f);
+    auto totalTitle = CCLabelBMFont::create("Total Playtime:", "GoldFont.fnt");
+    totalTitle->setScale(0.75f);
 
+
+    auto totalPlaytime = Data::getPlaytimeRaw(levelID);
+    auto totalLabel = CCLabelBMFont::create(CCString::create(Data::formattedPlaytime(Data::getTotalPlaytime(levelID)))->getCString(), "bigFont.fnt");
     auto playtime = Data::getSessionPlaytimeRaw(levelID);
     auto playtimeLabel = CCLabelBMFont::create(CCString::create(Data::formattedPlaytime(playtime))->getCString() , "bigFont.fnt");
     playtimeLabel->setScale(0.375f);
+    totalLabel->setScale(0.375f);
+
+
 
     auto contentLayout = geode::AxisLayout::create(geode::Axis::Column);
     contentLayout->setAutoScale(false);
@@ -40,6 +48,9 @@ bool PausePopup::setup(std::string const& levelID) {
     content->setAnchorPoint({ 0.f,0.f });
     content->setPosition({ 15.f,10.f });
 
+
+    content->addChild(totalTitle);
+    content->addChild(totalLabel);
     content->addChild(playtimeTitle);
     content->addChild(playtimeLabel);
 

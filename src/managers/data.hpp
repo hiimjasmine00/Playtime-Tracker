@@ -41,4 +41,6 @@ public:
 	static void deleteSessionAtIndex(std::string const& levelID, int index);
 
 	static void fixSessionAtIndex(std::string const& levelID, int index);
+
+	static int getTotalPlaytime(std::string const& levelID);
 };

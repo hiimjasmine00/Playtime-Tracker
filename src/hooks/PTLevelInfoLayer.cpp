@@ -28,7 +28,7 @@ class $modify(PTLevelInfoLayer, LevelInfoLayer) {
 		m_fields->m_level = level;
 
 		auto sprite = CCSprite::create("playtimeButton.png"_spr);
-		if(Settings::getInfoLayerPosition() == "Bottom") sprite->setScale(0.8f);
+		if(Settings::getInfoLayerPosition() == "Bottom") sprite->setScale(0.75f);
 
 		auto playtimeButton = CCMenuItemSpriteExtra::create(
 			sprite,

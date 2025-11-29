@@ -201,7 +201,7 @@ int Data::getPlaytimeRaw(std::string const& levelID) {
         }
         time_t timestamp;
         if (latestPair[0].isExactlyUInt() && latestPair.size() == 1) {
-            return time(&timestamp) - latestPair[0].asInt().unwrap();
+            return (time(&timestamp) - latestPair[0].asInt().unwrap());
         }
         for (auto& session : sessions) {
             for (auto& currPair : session) {
@@ -360,14 +360,35 @@ void Data::deleteSessionAtIndex(std::string const& levelID, int index) {
 void Data::fixSessionAtIndex(std::string const& levelID, int index) {
     auto data = getFile();
 
-        auto newSession = matjson::Value::array();
-        auto& session = data[levelID]["sessions"][index];
-        for (auto& currPair : session) {
-            if (currPair.size() >= 2) newSession.push(currPair);
+    auto newSession = matjson::Value::array();
+    auto& session = data[levelID]["sessions"][index];
+    for (auto& currPair : session) {
+        if (currPair.size() >= 2) newSession.push(currPair);
+    }
+    session = newSession;
+
+    if (newSession.size() == 0) Data::deleteSessionAtIndex(levelID, index);
+
+    writeFile(data);
+}
+
+int Data::getTotalPlaytime(std::string const& levelID) {
+    auto data = getFile();
+    auto& sessions = data[levelID]["sessions"];
+    time_t timestamp;
+
+    int playtime = 0;
+
+    try {
+        for (auto& currSession : sessions) {
+            for (auto& currPair : currSession) {
+                if (currPair.size() >= 2) playtime += currPair[1].asInt().unwrap() - currPair[0].asInt().unwrap();
+                if (currPair.size() == 1) playtime += time(&timestamp) - currPair[0].asInt().unwrap();
+            }
         }
-        session = newSession;
-
-        if (newSession.size() == 0) Data::deleteSessionAtIndex(levelID, index);
-
-        writeFile(data);
+        return playtime;
+    }
+    catch (const geode::UnwrapException&) {
+        return playtime;
+    }
 }
