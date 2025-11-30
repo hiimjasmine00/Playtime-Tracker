@@ -5,6 +5,7 @@
 #include <cvolton.level-id-api/include/EditorIDs.hpp>
 
 #include "../managers/data.hpp"
+#include "../managers/Settings.hpp"
 #include "../layers/menuPopup.hpp"
 
 using namespace geode::prelude;
@@ -28,9 +29,9 @@ class $modify(PTEditLevelLayer, EditLevelLayer) {
 			menu_selector(PTEditLevelLayer::onPlaytimeButton)
 		);
 
-		sprite->setScale(0.75f);
 
 		auto infoButtonMenu = this->getChildByID("info-button-menu");
+		auto folderMenu = this->getChildByID("folder-menu");
 
 		playtimeButton->setID("playtime-tracker-button");
 		
@@ -40,13 +41,24 @@ class $modify(PTEditLevelLayer, EditLevelLayer) {
 		
 		playtimeButton->setZOrder(1);
 
-		float x = 34.5f;
-		float y = infoButtonMenu->getChildByID("settings-button")->getPositionY();
+		if (Settings::getInfoLayerPosition() == "Bottom") {
 
-		playtimeButton->setPosition({ x, y });
+			sprite->setScale(0.75f);
 
-		infoButtonMenu->addChild(playtimeButton);
-		infoButtonMenu->updateLayout();
+			float x = 34.5f;
+			float y = infoButtonMenu->getChildByID("settings-button")->getPositionY();
+
+			playtimeButton->setPosition({ x, y });
+
+			infoButtonMenu->addChild(playtimeButton);
+			infoButtonMenu->updateLayout();
+		}
+		else {
+			sprite->setScale(0.8f);
+
+			folderMenu->addChild(playtimeButton);
+			folderMenu->updateLayout();
+		}
 
 		return true;
 	}
