@@ -19,9 +19,9 @@ bool PausePopup::setup(std::string const& levelID) {
     bg->setPosition({ 10.f,10.f });
     m_mainLayer->addChild(bg);
 
-    auto playtimeTitle = CCLabelBMFont::create("Current session:", "GoldFont.fnt");
+    auto playtimeTitle = CCLabelBMFont::create("Current session:", "goldFont.fnt");
     playtimeTitle->setScale(0.75f);
-    auto totalTitle = CCLabelBMFont::create("Total Playtime:", "GoldFont.fnt");
+    auto totalTitle = CCLabelBMFont::create("Total Playtime:", "goldFont.fnt");
     totalTitle->setScale(0.75f);
 
 
